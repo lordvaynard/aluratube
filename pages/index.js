@@ -1,3 +1,4 @@
+import React from "react";
 import config from "../config.json"
 import styled from "styled-components";
 import { CSSReset } from "../src/componentes/CSSReset";
@@ -5,6 +6,8 @@ import Menu from "../src/componentes/Menu";
 import { StyledTimeline } from "../src/componentes/Timeline";
 
 function HomePage() {
+    const [valorDoFiltro, setValorDoFiltro] = React.useState("");
+    // const valorDoFiltro = "Angu";
 
     return (
         <>
@@ -14,9 +17,11 @@ function HomePage() {
                 flexDirection: "column",
                 flex:1,
             }}>
-                <Menu />
+                <Menu valorDoFiltro={valorDoFiltro} setValorDoFiltro= {setValorDoFiltro} />
                 <Header />
-                <Timeline playlists={config.playlists} />
+                <Timeline searchValue={valorDoFiltro} playlists={config.playlists}>
+                    Conteúdo
+                </Timeline>
             </div>
         </>
     )
@@ -31,7 +36,6 @@ const StyledHeader = styled.div`
         border-radius: 50%;
     }
     .user-info {
-        margin-top: 50px;
         display: flex;
         align-items: center;
         width: 100%;
@@ -39,10 +43,16 @@ const StyledHeader = styled.div`
         gap: 16px
     }
 `;
+const StyledBanner = styled.div`
+    background-color: blue;
+    background-image: url(${({bg}) => bg});
+    height: 230px;;
+`;
+
 function Header() {
     return (
         <StyledHeader>
-            {/* <img src="" alt="banner" /> */}
+            <StyledBanner bg={config.bg}/>
             <section className="user-info">
                 <img src={`https://github.com/${config.github}.png`} alt="foto-perfil" />
                 <div>
@@ -54,21 +64,25 @@ function Header() {
     )
 }
 
-function Timeline(propriedades) {
+function Timeline({searchValue, ...propriedades}) {
     const playlistNames = Object.keys(propriedades.playlists);
     return (
         <StyledTimeline>
             {playlistNames.map(function (playlistNames) {  /* não usar forEach pois precisa converter o dado */
                 const videos = propriedades.playlists[playlistNames];
-                console.log(playlistNames);
-                console.log(videos);
+                // console.log(playlistNames);
+                // console.log(videos);
                 return (
-                    <section>
+                    <section key={playlistNames}>
                         <h2>{playlistNames}</h2>
                         <div>
-                            {videos.map((video) => {
+                            {videos.filter((video) => {
+                                const titleNormalized = video.title.toLowerCase();
+                                const searchValueNormalized = searchValue.toLowerCase();
+                                return titleNormalized.includes(searchValueNormalized)
+                            }).map((video) => {
                                 return (
-                                    <a href={video.url}>
+                                    <a key={video.url} href={video.url}>
                                         <img src={video.thumb} alt="" />
                                         <span>{video.title}</span>
                                     </a>

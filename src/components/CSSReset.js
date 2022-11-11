@@ -37,4 +37,26 @@ export const CSSReset = createGlobalStyle`
       opacity: .5;
     }
   }
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: ${({ theme }) => theme.backgroundBase} ${({ theme }) => theme.textColorBase};
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: ${({ theme }) => theme.textColorBase};
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: ${({ theme }) => theme.backgroundBase};
+  border-radius: 20px;
+  border: 3px solid ${({ theme }) => theme.textColorBase};
+}
+
+
 `;

@@ -1,8 +1,11 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
-import { CSSReset } from "../src/componentes/CSSReset";
-import ColorModeProvider, { ColorModeContext } from "../src/componentes/Menu/components/ColorMode";
-import RegisterVideo from "../src/componentes/RegisterVideo";
+import { CSSReset } from "../src/components/CSSReset";
+
+import ColorModeProvider, { ColorModeContext } from "../src/components/Menu/components/ColorMode";
+
+import Head from 'next/head';
+import RegisterVideo from "../src/components/RegisterVideo";
 
 const theme = {
     light: {
@@ -21,34 +24,38 @@ const theme = {
     }
 };
 
-// _app.js -> Definições globais do NextJS
-// ThemeProvider -> Prover o tema para a app toda
-// ColorModeProvider -> Prove o state de light ou dark mode para todo mundo 
-
 function ProviderWrapper(props) {
     return (
-        <ColorModeProvider initialMode={"light"}>
+        <ColorModeProvider initialMode={"dark"}>
             {props.children}
         </ColorModeProvider>
     )
 }
 
-function MyApp({ Component, pageProps }) {
-    const contexto = React.useContext(ColorModeContext);
-    console.log(contexto.mode);
+function Root({ Component, pageProps }) {
+    const contexto = React.useContext(ColorModeContext)
+
     return (
-            <ThemeProvider theme={theme[contexto.mode]}>
-                <CSSReset />
-                <Component {...pageProps} />
-                <RegisterVideo />
-            </ThemeProvider>
+        <ThemeProvider theme={theme[contexto.mode]}>
+            <CSSReset />
+
+            <Head>
+                <title>VaynardTube - Ronie Araujo</title>
+                <link rel="icon" href="https://www.youtube.com/s/desktop/233efd8f/img/favicon.ico" />
+            </Head>
+
+            <Component {...pageProps} />
+            <RegisterVideo />
+
+        </ThemeProvider>
     )
 }
 
 export default function _App(props) {
     return (
         <ProviderWrapper>
-            <MyApp {...props} />
+            <Root {...props} />
         </ProviderWrapper>
     )
-};
+}
+

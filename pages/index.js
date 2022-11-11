@@ -6,7 +6,6 @@ import { StyledTimeline } from "../src/componentes/Timeline";
 
 function HomePage() {
     const [valorDoFiltro, setValorDoFiltro] = React.useState("");
-    // const valorDoFiltro = "Angu";
 
     return (
         <>

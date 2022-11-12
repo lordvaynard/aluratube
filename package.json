@@ -12,5 +12,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
+  },
+  "devDependencies": {
+    "react-native-dotenv": "^3.4.2"
   }
 }
